@@ -2,6 +2,8 @@
 
 current_time=$(date +"%d%m%y-%H%M%S")
 kb=K
+bucket_name=upgrad-anupamdutta
+myname=Anupam
 
 sudo apt update -y
 
@@ -39,12 +41,12 @@ fi
 
 sleep 5
 echo "**capturing apache2 logs...**"
-tar -zcvf /tmp/Anupam-httpd-logs-$current_time.tar /var/log/apache2/*.log
-size_of_log=`wc -l /tmp/Anupam-httpd-logs-$current_time.tar | awk '{print $1}'`
+tar -zcvf /tmp/$myname-httpd-logs-$current_time.tar /var/log/apache2/*.log
+size_of_log=`wc -l /tmp/$myname-httpd-logs-$current_time.tar | awk '{print $1}'`
 
 sleep 5
 echo "**copying the logs to s3**"
-aws s3 cp /tmp/Anupam-httpd-logs-$current_time.tar s3://upgrad-anupamdutta/Anupam-httpd-logs-$current_time.tar
+aws s3 cp /tmp/$myname-httpd-logs-$current_time.tar s3://$bucket_name/$myname-httpd-logs-$current_time.tar
 
 
 
@@ -84,6 +86,8 @@ else
 			      <th>Type</th>
 		              <th>Size</th>
 			</tr>
+		    </table>
+	            <table style="width:40%">	    
 			<tr>
 			      <td>httpd</td>
 			      <td>$current_time</td>
@@ -97,13 +101,20 @@ fi
 
 sleep 5
 echo "**copying inventory.html to s3**"
-aws s3 cp /var/www/html/inventory.html s3://upgrad-anupamdutta
+aws s3 cp /var/www/html/inventory.html s3://$bucket_name
 
 sleep 5
 echo "**creating cron job..**"
 curr_path=$(pwd)
 echo $curr_path
 cd /etc/cron.d/
-sudo touch /etc/cron.d/automation
-sudo echo "0 20 * * * root /root/Automation_Project-/automation.sh" > /etc/cron.d/automation
-sudo chmod 600 /etc/cron.d/automation
+FILE=/etc/cron.d/automation
+if [ -f "$FILE" ];then
+	echo "**cron job schedule already exists**"
+else	
+	echo "**cron job does not exist, creating a new job..**"
+        sudo touch /etc/cron.d/automation
+        sudo echo "0 0 * * * root /root/Automation_Project-/automation.sh" > /etc/cron.d/automation
+        sudo chmod 644 /etc/cron.d/automation
+fi
+
