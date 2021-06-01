@@ -31,7 +31,7 @@ s3://${s3_bucket}/${myname}-httpd-logs-${timestamp}.tar
 cat /var/www/html/inventory.html
  
 
-Log Type         Time Created         Type        Size
+  Log Type         Time Created         Type        Size
 
 
 If an inventory file already exists, the content of the file should not be deleted or overwritten. New content should be only appended in a new line.
@@ -39,19 +39,19 @@ If an inventory file already exists, the content of the file should not be delet
 
 When the script runs, it should create a new entry in the inventory.html file about the following: 
 
-What log type is archived?
-Date when the logs were archived 
-The type of archive
-The size of the archive
-Your inventory file should look like the following after multiple runs:
+  What log type is archived?
+  Date when the logs were archived 
+  The type of archive
+  The size of the archive
+  Your inventory file should look like the following after multiple runs:
 
-cat /var/www/html/inventory.html
+  cat /var/www/html/inventory.html
 
-Log Type               Date Created               Type      Size 
-httpd-logs        010120201-100510         tar        10K
-httpd-logs        020120201-100510         tar        40K
-httpd-logs        030120201-100510        tar        4K
-httpd-logs        040120201-100510        tar        6K
+  Log Type               Date Created               Type      Size 
+  httpd-logs        010120201-100510         tar        10K
+  httpd-logs        020120201-100510         tar        40K
+  httpd-logs        030120201-100510        tar        4K
+  httpd-logs        040120201-100510        tar        6K
 
 
 
